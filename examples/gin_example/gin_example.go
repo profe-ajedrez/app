@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/profe-ajedrez/app/examples"
 	"github.com/profe-ajedrez/app/ginapp"
-	"github.com/profe-ajedrez/app/repository"
+	"github.com/profe-ajedrez/app/services"
 )
 
 func main() {
@@ -30,18 +30,7 @@ func handlersGin(r *gin.Engine) {
 
 func ClientHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		container := repository.GetContainer()
-		cli := container.Clients().Get(c)
-		count := len(cli)
-
-		response := struct {
-			Data  []repository.ClientModel `json:"data"`
-			Count int                      `json:"count"`
-		}{
-			Data:  cli,
-			Count: count,
-		}
-
+		response := services.GetClients(c)
 		c.JSON(http.StatusOK, response)
 
 	}

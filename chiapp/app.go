@@ -5,8 +5,7 @@ import (
 	"github.com/profe-ajedrez/app/errs"
 )
 
-type ChiEngine func() *chi.Mux
-type ChiHandlers func() *chi.Mux
+type ChiHandlers func(*chi.Mux)
 
 type App struct {
 	handlers ChiHandlers
@@ -20,14 +19,14 @@ func (a *App) WithHandlers(handlers ChiHandlers) {
 	a.handlers = handlers
 }
 
-func (a App) Engine() *chi.Mux {
-	return chi.NewRouter()
-}
-
 func (a App) Handlers() *chi.Mux {
+	r := chi.NewRouter()
+
 	if a.handlers == nil {
 		panic(errs.NewChiAppErr("there is no handlers defined"))
 	}
 
-	return a.handlers()
+	a.handlers(r)
+
+	return r
 }

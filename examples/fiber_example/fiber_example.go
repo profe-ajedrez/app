@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/profe-ajedrez/app/examples"
 	"github.com/profe-ajedrez/app/fiberapp"
-	"github.com/profe-ajedrez/app/repository"
+	"github.com/profe-ajedrez/app/services"
 )
 
 func main() {
@@ -30,18 +30,7 @@ func handlersFiber(r *fiber.App) {
 
 func ClientHandler() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		container := repository.GetContainer()
-		cli := container.Clients().Get(c.Context())
-		count := len(cli)
-
-		response := struct {
-			Data  []repository.ClientModel `json:"data"`
-			Count int                      `json:"count"`
-		}{
-			Data:  cli,
-			Count: count,
-		}
-
+		response := services.GetClients(c.Context())
 		return c.Status(http.StatusOK).JSON(response)
 	}
 }
