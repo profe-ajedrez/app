@@ -15,7 +15,7 @@ func BenchmarkSetup(b *testing.B) {
 }
 
 func BenchmarkExecution(b *testing.B) {
-	go main()
+
 	for i := 0; i <= b.N; i++ {
 		_, err := http.Get("http://localhost:3000/clients.json")
 
